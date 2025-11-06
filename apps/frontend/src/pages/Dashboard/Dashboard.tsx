@@ -55,14 +55,6 @@ const fireMarkerIcon = new L.Icon({
 })
 
 const Dashboard = () => {
-  const [metrics, setMetrics] = useState({
-    activeDrones: 12,
-    activeGeofences: 22,
-    monitoredZones: 150,
-    alertsToday: 5,
-    wildlifeRescues: 23,
-    totalSubscribers: 30,
-  })
   const [drones, setDrones] = useState<any[]>([])
   const [recentAlerts, setRecentAlerts] = useState<any[]>([])
   const [recentDetections, setRecentDetections] = useState<any[]>([])
@@ -75,12 +67,6 @@ const Dashboard = () => {
 
   useEffect(() => {
     // Fetch dashboard data
-    api.get('/dashboard/metrics').then((res) => {
-      setMetrics(res.data)
-    }).catch(() => {
-      // Use default values if API fails
-    })
-    
     api.get('/drones').then((res) => {
       setDrones(res.data || [])
     }).catch(() => {

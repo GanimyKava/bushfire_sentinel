@@ -13,7 +13,6 @@ import {
   DialogContent,
   DialogActions,
   Chip,
-  Avatar,
   Popover,
 } from '@mui/material'
 import {

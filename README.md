@@ -91,7 +91,7 @@ graph TB
     end
 
     subgraph "Database Layer"
-        MongoDB[(MongoDB<br/>Primary Database)]
+        MongoDB[MongoDB<br/>Primary Database]
         GeoJSON[GeoJSON Collections<br/>Geofence Polygons]
     end
 
@@ -233,7 +233,7 @@ sequenceDiagram
     Frontend->>Frontend: Store Token in Context
 
     User->>Frontend: View Dashboard
-    Frontend->>Backend: GET /api/dashboard (with JWT)
+    Frontend->>Backend: GET /api/dashboard with JWT
     Backend->>Backend: Verify JWT
     Backend->>MongoDB: Query Metrics
     MongoDB-->>Backend: Dashboard Data
@@ -267,7 +267,7 @@ sequenceDiagram
     Frontend->>Backend: POST /api/analytics/query
     Backend->>ExternalAPIs: Query MaaS Knowledge Base
     ExternalAPIs-->>Backend: Analytical Data
-    Backend->>ExternalAPIs: Query BOM/RFS (if needed)
+    Backend->>ExternalAPIs: Query BOM/RFS if needed
     ExternalAPIs-->>Backend: Weather/Fire Data
     Backend-->>Frontend: AI-Generated Response
     Frontend->>User: Display Analytics with Charts

@@ -153,21 +153,6 @@ const Dashboard = () => {
     }
   }
 
-  const getAlertColor = (severity?: string) => {
-    switch (severity) {
-      case 'critical':
-      case 'high':
-        return '#d32f2f'
-      case 'warning':
-      case 'medium':
-        return '#f57c00'
-      case 'info':
-      case 'low':
-        return '#1976d2'
-      default:
-        return '#757575'
-    }
-  }
 
   const filteredGeofences = geofenceFilter === 'my' 
     ? geofences.filter((g) => g.region?.toLowerCase().includes('nsw')) // Filter for NSW geofences

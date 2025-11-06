@@ -243,7 +243,7 @@ const Alerts = () => {
     }
   }
 
-  const getPersonaRelevance = (alert: Alert) => {
+  const getPersonaRelevance = () => {
     if (!user?.role) return null
 
     const relevance: { [key: string]: string } = {
@@ -424,7 +424,7 @@ const Alerts = () => {
                       </TableRow>
                     ) : (
                       alerts.map((alert) => {
-                        const personaRelevance = getPersonaRelevance(alert)
+                        const personaRelevance = getPersonaRelevance()
                         const recipientInfo = getRecipientInfo(alert)
                         return (
                           <TableRow

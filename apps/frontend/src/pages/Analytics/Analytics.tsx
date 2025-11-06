@@ -12,7 +12,6 @@ import {
   Grid,
   Divider,
   CircularProgress,
-  Link,
   Table,
   TableBody,
   TableCell,
@@ -402,7 +401,7 @@ What would you like to analyze?`
                   fill="#8884d8"
                   dataKey="value"
                 >
-                  {data.data.map((entry: any, index: number) => (
+                  {data.data.map((_entry: any, index: number) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>

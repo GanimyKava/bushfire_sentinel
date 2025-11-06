@@ -2,12 +2,12 @@
 graph TB
     subgraph "Client Layer"
         Browser[Web Browser]
-        User[Users - Fire Rangers, Commanders, - Homeowners, Engineers, Biologists]
+        User["Users - Fire Rangers, Commanders, Homeowners, Engineers, Biologists"]
     end
 
-    subgraph "Frontend Application React & TypeScript"
+    subgraph "Frontend Application React and TypeScript"
         subgraph "Pages"
-            Dashboard[Dashboard - Overview & Metrics]
+            Dashboard["Dashboard - Overview and Metrics"]
             Geofence[Geofence Management - Polygon Mapping]
             Detection[Detection Center - Alert Generation]
             Drones[Drone Fleet - Fleet Management]
@@ -19,7 +19,7 @@ graph TB
         end
 
         subgraph "Components"
-            Layout[Layout Components - TopBar, Sidebar, Footer]
+            Layout["Layout Components - TopBar, Sidebar, Footer"]
             Map[Map Components - Leaflet Integration]
             Charts[Chart Components - Recharts]
         end
@@ -30,15 +30,15 @@ graph TB
         end
     end
 
-    subgraph "Backend API Node.js and Express"
+    subgraph "Backend API Node.js Express"
         subgraph "API Routes"
-            AuthRoute[/api/auth - Login, Register, /me]
-            DroneRoute[/api/drones - Fleet Operations]
-            GeofenceRoute[/api/geofences - Geofence CRUD]
-            DetectionRoute[/api/detections - Detection Events]
-            AlertRoute[/api/alerts - Alert Management]
-            SubscriberRoute[/api/subscribers - Subscriber CRUD]
-            DashboardRoute[/api/dashboard - Metrics & Stats]
+            AuthRoute["/api/auth - Login, Register, /me"]
+            DroneRoute["/api/drones - Fleet Operations"]
+            GeofenceRoute["/api/geofences - Geofence CRUD"]
+            DetectionRoute["/api/detections - Detection Events"]
+            AlertRoute["/api/alerts - Alert Management"]
+            SubscriberRoute["/api/subscribers - Subscriber CRUD"]
+            DashboardRoute["/api/dashboard - Metrics and Stats"]
         end
 
         subgraph "Middleware"
@@ -58,7 +58,7 @@ graph TB
         subgraph "Utilities"
             DemoData[Demo Data Generator - Fallback Data]
             Seed[Database Seeder - Initial Data]
-            MockAPIs[Mock API Clients - CAMARA, Nokia, Twilio]
+            MockAPIs["Mock API Clients - CAMARA, Nokia, Twilio"]
         end
 
         SocketIO[Socket.io Server - Real-time Alerts]
@@ -69,7 +69,7 @@ graph TB
         GeoJSON[GeoJSON Collections - Geofence Polygons]
     end
 
-    subgraph "External APIs Mocked"
+    subgraph "External APIs - Mocked"
         CAMARA[CAMARA APIs - SIM Swap Detection - Quality on Demand]
         Nokia[Nokia NaaC - Network as a Code - Geofence Orchestration]
         Twilio[Twilio SMS - Alert Notifications]
@@ -78,7 +78,7 @@ graph TB
     subgraph "External Services"
         BOM[BOM API - Weather Data]
         RFS[RFS API - Fire Service Data]
-        MaaS[MaaS APIs - Knowledge Base - Q&A Assistant]
+        MaaS["MaaS APIs - Knowledge Base - Q and A Assistant"]
     end
 
     %% User interactions
@@ -211,12 +211,12 @@ sequenceDiagram
     Backend->>Backend: Verify JWT
     Backend->>MongoDB: Query Metrics
     MongoDB-->>Backend: Dashboard Data
-    Backend-->>Frontend: Metrics & Stats
+    Backend-->>Frontend: Metrics and Stats
 
     User->>Frontend: View Geofences
     Frontend->>Backend: GET /api/geofences
     Backend->>MongoDB: Query Geofences
-    MongoDB-->>Backend: Geofence Polygons (GeoJSON)
+    MongoDB-->>Backend: Geofence Polygons GeoJSON
     Backend->>ExternalAPIs: Mock Nokia NaaC
     ExternalAPIs-->>Backend: Network Slice Info
     Backend-->>Frontend: Geofences + Network Data
@@ -241,8 +241,8 @@ sequenceDiagram
     Frontend->>Backend: POST /api/analytics/query
     Backend->>ExternalAPIs: Query MaaS Knowledge Base
     ExternalAPIs-->>Backend: Analytical Data
-    Backend->>ExternalAPIs: Query BOM/RFS if needed
-    ExternalAPIs-->>Backend: Weather/Fire Data
+    Backend->>ExternalAPIs: Query BOM or RFS if needed
+    ExternalAPIs-->>Backend: Weather and Fire Data
     Backend-->>Frontend: AI-Generated Response
     Frontend->>User: Display Analytics with Charts
 ```

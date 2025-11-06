@@ -1,93 +1,84 @@
+# Architecture Overview
+
+## High-Level Architecture
+
 ```mermaid
 graph TB
     subgraph "Client Layer"
+        User[Users]
         Browser[Web Browser]
-        User["Users - Fire Rangers, Commanders, Homeowners, Engineers, Biologists"]
     end
 
-    subgraph "Frontend Application React and TypeScript"
-        subgraph "Pages"
-            Dashboard["Dashboard - Overview and Metrics"]
-            Geofence[Geofence Management - Polygon Mapping]
-            Detection[Detection Center - Alert Generation]
-            Drones[Drone Fleet - Fleet Management]
-            Subscribers[Subscriber Management - User Management]
-            Alerts[Alerts Page - Alert History]
-            Analytics[Analytics Page - AI Assistant]
-            Login[Login Page]
-            Profile[Profile Page]
-        end
-
-        subgraph "Components"
-            Layout["Layout Components - TopBar, Sidebar, Footer"]
-            Map[Map Components - Leaflet Integration]
-            Charts[Chart Components - Recharts]
-        end
-
-        subgraph "State Management"
-            AuthContext[AuthContext - JWT Authentication]
-            Axios[Axios Client - API Communication]
-        end
+    subgraph "Frontend"
+        FrontendApp[React Application]
     end
 
-    subgraph "Backend API Node.js Express"
-        subgraph "API Routes"
-            AuthRoute["/api/auth - Login, Register, /me"]
-            DroneRoute["/api/drones - Fleet Operations"]
-            GeofenceRoute["/api/geofences - Geofence CRUD"]
-            DetectionRoute["/api/detections - Detection Events"]
-            AlertRoute["/api/alerts - Alert Management"]
-            SubscriberRoute["/api/subscribers - Subscriber CRUD"]
-            DashboardRoute["/api/dashboard - Metrics and Stats"]
-        end
-
-        subgraph "Middleware"
-            AuthMiddleware[JWT Auth Middleware - Token Validation]
-            CORS[CORS Middleware]
-        end
-
-        subgraph "Data Models"
-            UserModel[User Model - Authentication]
-            DroneModel[Drone Model - Fleet Data]
-            GeofenceModel[Geofence Model - Polygon Data]
-            DetectionModel[Detection Model - Fire Events]
-            AlertModel[Alert Model - Notifications]
-            SubscriberModel[Subscriber Model - User Subscriptions]
-        end
-
-        subgraph "Utilities"
-            DemoData[Demo Data Generator - Fallback Data]
-            Seed[Database Seeder - Initial Data]
-            MockAPIs["Mock API Clients - CAMARA, Nokia, Twilio"]
-        end
-
-        SocketIO[Socket.io Server - Real-time Alerts]
+    subgraph "Backend"
+        APIServer[Express API Server]
+        SocketServer[Socket.io Server]
     end
 
-    subgraph "Database Layer"
-        MongoDB[MongoDB - Primary Database]
-        GeoJSON[GeoJSON Collections - Geofence Polygons]
-    end
-
-    subgraph "External APIs - Mocked"
-        CAMARA[CAMARA APIs - SIM Swap Detection - Quality on Demand]
-        Nokia[Nokia NaaC - Network as a Code - Geofence Orchestration]
-        Twilio[Twilio SMS - Alert Notifications]
+    subgraph "Data Layer"
+        Database[(MongoDB)]
     end
 
     subgraph "External Services"
-        BOM[BOM API - Weather Data]
-        RFS[RFS API - Fire Service Data]
-        MaaS["MaaS APIs - Knowledge Base - Q and A Assistant"]
+        ExternalAPIs[External APIs]
     end
 
-    %% User interactions
     User --> Browser
-    Browser --> Login
-    Login --> AuthContext
-    AuthContext --> AuthRoute
+    Browser --> FrontendApp
+    FrontendApp --> APIServer
+    FrontendApp --> SocketServer
+    APIServer --> Database
+    APIServer --> ExternalAPIs
+    SocketServer --> FrontendApp
 
-    %% Frontend navigation
+    classDef frontend fill:#61dafb,stroke:#20232a,stroke-width:2px
+    classDef backend fill:#339933,stroke:#20232a,stroke-width:2px
+    classDef database fill:#4db33d,stroke:#20232a,stroke-width:2px
+    classDef external fill:#ff6b35,stroke:#20232a,stroke-width:2px
+
+    class FrontendApp frontend
+    class APIServer,SocketServer backend
+    class Database database
+    class ExternalAPIs external
+```
+
+## Frontend Architecture
+
+```mermaid
+graph TB
+    subgraph "Pages"
+        Dashboard[Dashboard]
+        Geofence[Geofence]
+        Detection[Detection]
+        Drones[Drones]
+        Subscribers[Subscribers]
+        Alerts[Alerts]
+        Analytics[Analytics]
+        Login[Login]
+    end
+
+    subgraph "Shared Components"
+        Layout[Layout]
+        Map[Map Components]
+        Charts[Chart Components]
+    end
+
+    subgraph "State Management"
+        AuthContext[Auth Context]
+        AxiosClient[Axios Client]
+    end
+
+    Dashboard --> Layout
+    Geofence --> Layout
+    Detection --> Layout
+    Drones --> Layout
+    Subscribers --> Layout
+    Alerts --> Layout
+    Analytics --> Layout
+
     Dashboard --> Map
     Dashboard --> Charts
     Geofence --> Map
@@ -95,25 +86,70 @@ graph TB
     Alerts --> Map
     Analytics --> Charts
 
-    %% Frontend to Backend
-    Dashboard --> Axios
-    Geofence --> Axios
-    Detection --> Axios
-    Drones --> Axios
-    Subscribers --> Axios
-    Alerts --> Axios
-    Analytics --> Axios
-    Profile --> Axios
+    Login --> AuthContext
+    Dashboard --> AuthContext
+    Geofence --> AuthContext
+    Detection --> AuthContext
+    Drones --> AuthContext
+    Subscribers --> AuthContext
+    Alerts --> AuthContext
+    Analytics --> AuthContext
 
-    Axios --> AuthRoute
-    Axios --> DroneRoute
-    Axios --> GeofenceRoute
-    Axios --> DetectionRoute
-    Axios --> AlertRoute
-    Axios --> SubscriberRoute
-    Axios --> DashboardRoute
+    Dashboard --> AxiosClient
+    Geofence --> AxiosClient
+    Detection --> AxiosClient
+    Drones --> AxiosClient
+    Subscribers --> AxiosClient
+    Alerts --> AxiosClient
+    Analytics --> AxiosClient
 
-    %% Backend routing
+    classDef pages fill:#61dafb,stroke:#20232a,stroke-width:2px
+    classDef components fill:#90caf9,stroke:#20232a,stroke-width:2px
+    classDef state fill:#42a5f5,stroke:#20232a,stroke-width:2px
+
+    class Dashboard,Geofence,Detection,Drones,Subscribers,Alerts,Analytics,Login pages
+    class Layout,Map,Charts components
+    class AuthContext,AxiosClient state
+```
+
+## Backend Architecture
+
+```mermaid
+graph TB
+    subgraph "API Routes"
+        AuthRoute["/api/auth"]
+        DroneRoute["/api/drones"]
+        GeofenceRoute["/api/geofences"]
+        DetectionRoute["/api/detections"]
+        AlertRoute["/api/alerts"]
+        SubscriberRoute["/api/subscribers"]
+        DashboardRoute["/api/dashboard"]
+    end
+
+    subgraph "Middleware"
+        AuthMiddleware[JWT Auth]
+        CORS[CORS]
+    end
+
+    subgraph "Data Models"
+        UserModel[User]
+        DroneModel[Drone]
+        GeofenceModel[Geofence]
+        DetectionModel[Detection]
+        AlertModel[Alert]
+        SubscriberModel[Subscriber]
+    end
+
+    subgraph "Utilities"
+        DemoData[Demo Data]
+        Seed[Database Seeder]
+        MockAPIs[Mock APIs]
+    end
+
+    subgraph "Real-time"
+        SocketIO[Socket.io]
+    end
+
     AuthRoute --> AuthMiddleware
     DroneRoute --> AuthMiddleware
     GeofenceRoute --> AuthMiddleware
@@ -122,7 +158,6 @@ graph TB
     SubscriberRoute --> AuthMiddleware
     DashboardRoute --> AuthMiddleware
 
-    %% Backend to Models
     AuthRoute --> UserModel
     DroneRoute --> DroneModel
     GeofenceRoute --> GeofenceModel
@@ -130,65 +165,125 @@ graph TB
     AlertRoute --> AlertModel
     SubscriberRoute --> SubscriberModel
 
-    %% Models to Database
-    UserModel --> MongoDB
-    DroneModel --> MongoDB
-    GeofenceModel --> MongoDB
-    GeofenceModel --> GeoJSON
-    DetectionModel --> MongoDB
-    AlertModel --> MongoDB
-    SubscriberModel --> MongoDB
-
-    %% Fallback data
     DroneRoute --> DemoData
     GeofenceRoute --> DemoData
     DetectionRoute --> DemoData
     AlertRoute --> DemoData
     SubscriberRoute --> DemoData
-    DemoData --> MongoDB
 
-    %% Database seeding
-    Seed --> MongoDB
-    Seed --> UserModel
-    Seed --> DroneModel
-    Seed --> GeofenceModel
-    Seed --> DetectionModel
-    Seed --> AlertModel
-    Seed --> SubscriberModel
-
-    %% Real-time communication
-    SocketIO --> Browser
     AlertRoute --> SocketIO
     DetectionRoute --> SocketIO
 
-    %% External API integrations
     SubscriberRoute --> MockAPIs
     GeofenceRoute --> MockAPIs
     DroneRoute --> MockAPIs
-    MockAPIs --> CAMARA
-    MockAPIs --> Nokia
-    MockAPIs --> Twilio
 
-    %% Analytics integrations
-    Analytics --> MaaS
-    Analytics --> BOM
-    Analytics --> RFS
+    classDef routes fill:#339933,stroke:#20232a,stroke-width:2px
+    classDef middleware fill:#66bb6a,stroke:#20232a,stroke-width:2px
+    classDef models fill:#81c784,stroke:#20232a,stroke-width:2px
+    classDef utils fill:#a5d6a7,stroke:#20232a,stroke-width:2px
+    classDef realtime fill:#f39c12,stroke:#20232a,stroke-width:2px
 
-    %% Styling
+    class AuthRoute,DroneRoute,GeofenceRoute,DetectionRoute,AlertRoute,SubscriberRoute,DashboardRoute routes
+    class AuthMiddleware,CORS middleware
+    class UserModel,DroneModel,GeofenceModel,DetectionModel,AlertModel,SubscriberModel models
+    class DemoData,Seed,MockAPIs utils
+    class SocketIO realtime
+```
+
+## Data Flow Architecture
+
+```mermaid
+graph LR
+    subgraph "Frontend"
+        Pages[Pages]
+        Axios[Axios Client]
+    end
+
+    subgraph "Backend"
+        Routes[API Routes]
+        Middleware[Middleware]
+        Models[Data Models]
+    end
+
+    subgraph "Database"
+        MongoDB[(MongoDB)]
+    end
+
+    subgraph "External"
+        ExternalAPIs[External APIs]
+    end
+
+    Pages --> Axios
+    Axios --> Routes
+    Routes --> Middleware
+    Middleware --> Models
+    Models --> MongoDB
+    Routes --> ExternalAPIs
+    Routes --> SocketIO[Socket.io]
+    SocketIO --> Pages
+
     classDef frontend fill:#61dafb,stroke:#20232a,stroke-width:2px
     classDef backend fill:#339933,stroke:#20232a,stroke-width:2px
     classDef database fill:#4db33d,stroke:#20232a,stroke-width:2px
     classDef external fill:#ff6b35,stroke:#20232a,stroke-width:2px
     classDef realtime fill:#f39c12,stroke:#20232a,stroke-width:2px
 
-    class Dashboard,Geofence,Detection,Drones,Subscribers,Alerts,Analytics,Login,Profile,Layout,Map,Charts,AuthContext,Axios frontend
-    class AuthRoute,DroneRoute,GeofenceRoute,DetectionRoute,AlertRoute,SubscriberRoute,DashboardRoute,AuthMiddleware,CORS,UserModel,DroneModel,GeofenceModel,DetectionModel,AlertModel,SubscriberModel,DemoData,Seed,MockAPIs backend
-    class MongoDB,GeoJSON database
-    class CAMARA,Nokia,Twilio,BOM,RFS,MaaS external
+    class Pages,Axios frontend
+    class Routes,Middleware,Models backend
+    class MongoDB database
+    class ExternalAPIs external
     class SocketIO realtime
 ```
 
-### System Flow
+## Integration Architecture
+
+```mermaid
+graph TB
+    subgraph "Backend Services"
+        APIServer[API Server]
+        SocketServer[Socket.io]
+    end
+
+    subgraph "External APIs - Mocked"
+        CAMARA[CAMARA APIs]
+        Nokia[Nokia NaaC]
+        Twilio[Twilio SMS]
+    end
+
+    subgraph "External Services"
+        BOM[BOM API]
+        RFS[RFS API]
+        MaaS[MaaS APIs]
+    end
+
+    subgraph "Database"
+        MongoDB[(MongoDB)]
+    end
+
+    APIServer --> CAMARA
+    APIServer --> Nokia
+    APIServer --> Twilio
+    APIServer --> BOM
+    APIServer --> RFS
+    APIServer --> MaaS
+    APIServer --> MongoDB
+    APIServer --> SocketServer
+
+    classDef backend fill:#339933,stroke:#20232a,stroke-width:2px
+    classDef mocked fill:#ff6b35,stroke:#20232a,stroke-width:2px
+    classDef external fill:#ff9800,stroke:#20232a,stroke-width:2px
+    classDef database fill:#4db33d,stroke:#20232a,stroke-width:2px
+    classDef realtime fill:#f39c12,stroke:#20232a,stroke-width:2px
+
+    class APIServer backend
+    class CAMARA,Nokia,Twilio mocked
+    class BOM,RFS,MaaS external
+    class MongoDB database
+    class SocketServer realtime
+```
+
+# System Flow
 
 ```mermaid
 sequenceDiagram
@@ -247,7 +342,7 @@ sequenceDiagram
     Frontend->>User: Display Analytics with Charts
 ```
 
-### Data Model Relationships
+# Data Model Relationships
 
 ```mermaid
 erDiagram

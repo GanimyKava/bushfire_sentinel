@@ -1,0 +1,9 @@
+path: ../datasets/fire_smoke  # update to your dataset root
+train: images/train
+val: images/val
+test: images/test  # optional
+
+names:
+  0: fire
+#  1: smoke
+

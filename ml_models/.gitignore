@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+
+# IDE / Editor
+.idea/
+.vscode/
+
+# Artifacts
+artifacts/
+models/*.pt
+videos/*.mp4
+runs/
+datasets/
+!datasets/fire_smoke/
+!datasets/fire_smoke/**
+
+# Training configs and reports
+.ultralytics/
+
+# Environment files
+.env
+env.local
+env.*.bak
+
